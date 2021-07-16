@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: golang_jwt
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgresql
+    volumes:
+      - ./:/app
+  postgresql:
+    image: postgres:lastest
+    container_name: postgres
+    command: mysqld --user=root
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=article
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
